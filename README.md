@@ -1,8 +1,5 @@
 ---
 title: Growth Decision Brief — UAE Food
-emoji: ◆
-colorFrom: green
-colorTo: gray
 sdk: docker
 app_port: 8501
 pinned: false
@@ -69,50 +66,8 @@ delivery time and cancellation rate.
 
 Fully synthetic and reproducible — `python generate_data.py` regenerates it from a fixed
 seed. 26 weeks of 2025, weekly grain, four UAE cities (Dubai, Abu Dhabi, Sharjah,
-Ajman), plus a cohort retention table. **No confidential information is used.**
+Ajman), plus a cohort retention table. 
 
-The generator encodes a deliberate story so the engine has something real to find: Dubai
-runs *ahead* of plan on audience but *behind* on revenue, because order frequency and
-take rate are eroding while acquisition promo per new user climbs and each new cohort
-retains worse than the last — the shape of a market buying users it cannot keep.
-
-## Run it
-
-```bash
-pip install -r requirements.txt
-python generate_data.py          # writes data/*.csv
-streamlit run app.py
-```
-
-## Deploy it (Streamlit Community Cloud — free)
-
-Hugging Face moved Gradio and Docker Spaces behind a paid plan in mid-2026, so
-Community Cloud is the free route. Public apps are unlimited; you need a GitHub account.
-
-1. Push this folder to a **public** GitHub repository.
-2. Go to [share.streamlit.io](https://share.streamlit.io) and sign in with GitHub.
-3. **Create app** → **Deploy a public app from GitHub** → pick the repo, branch `main`,
-   main file path `app.py`.
-4. Under **Advanced settings → Secrets**, paste:
-
-   ```toml
-   HF_TOKEN = "hf_your_token_here"
-   ```
-
-   Use a Hugging Face access token with *Make calls to Inference Providers* permission.
-   Inference is free to call from anywhere — only Spaces *hosting* became paid.
-5. Deploy. The app builds in two or three minutes at
-   `https://<your-app-name>.streamlit.app`.
-
-Without the secret the app still runs, on the rule-based writer. Free apps sleep after
-about 12 hours of no traffic and wake on the next visit, so open the link once before
-you share it.
-
-### Other hosts
-
-A `Dockerfile` is included for anywhere that takes a container — Render, Railway, Fly,
-a VPS, or a Hugging Face Docker Space if you have PRO. It serves on port 8501 and reads
-`HF_TOKEN` from the environment.
 
 ## Files
 
@@ -124,13 +79,3 @@ a VPS, or a Hugging Face Docker Space if you have PRO. It serves on port 8501 an
 | `generate_data.py` | Seeded synthetic dataset generator |
 | `Dockerfile` | Container definition for any container host |
 
-## 100-word summary
-
-> Growth managers spend their week asking one question: we are off plan, why, and what do
-> we do Monday? This tool answers both. A pandas engine decomposes the revenue gap through
-> MAU × OPU × AOV × take rate using a chain-linked bridge that reconciles exactly, then
-> corroborates it against funnel conversion, cohort retention, promo cost per new user and
-> delivery times. Only then does an open-weights model read that closed evidence pack and
-> write three takeaways plus actions with owners and guardrails. The rule is deliberate:
-> the model never does arithmetic, so every figure is auditable. Data is synthetic and
-> reproducible.
